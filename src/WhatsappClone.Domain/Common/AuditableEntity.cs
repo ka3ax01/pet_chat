@@ -7,4 +7,5 @@ public class AuditableEntity<Tid> : BaseEntity<Tid>
     public Guid CreatedById { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public Guid? UpdatedById { get; set; }
+    public bool IsDeleted { get; set; }
 }

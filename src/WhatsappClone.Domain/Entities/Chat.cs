@@ -11,7 +11,7 @@ public class Chat : AuditableEntity<Guid>
 
     #region Navigation Properties
     public User CreatedBy { get; set; } = default!;
-    public ICollection<ChatMember> Members { get; set; } = new List<ChatMember>();
+    public ICollection<ChatMember> ChatMembers { get; set; } = new List<ChatMember>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
     #endregion
 }

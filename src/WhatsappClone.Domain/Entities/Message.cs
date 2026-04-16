@@ -9,7 +9,6 @@ public class Message : AuditableEntity<Guid>
     public MessageType Type { get; set; }
     public string? Text { get; set; }
     public Guid? ReplyToMessageId { get; set; }
-    public bool IsDeleted { get; set; }
 
     public Chat Chat { get; set; } = default!;
     public User CreatedBy { get; set; } = default!;

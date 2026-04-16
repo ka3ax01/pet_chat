@@ -9,7 +9,6 @@ public class MessageAttachment : AuditableEntity<Guid>
     public string FileUrl { get; set; } = default!;
     public string? ThumbnailUrl { get; set; }
     public long FileSizeBytes { get; set; }
-    public bool IsDeleted { get; set; }
 
     #region Navigation Properties
     public Message Message { get; set; } = default!;

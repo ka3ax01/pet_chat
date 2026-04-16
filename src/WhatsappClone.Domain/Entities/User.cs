@@ -14,4 +14,7 @@ public class User : AuditableEntity<Guid>
 
     public ICollection<Chat> CreatedChats { get; set; } = new List<Chat>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
+
+    public ICollection<MessageAttachment> CreatedMessageAttachments { get; set; } = new List<MessageAttachment>();
+    public ICollection<EntityAction> EntityActions { get; set; } = new List<EntityAction>();
 }

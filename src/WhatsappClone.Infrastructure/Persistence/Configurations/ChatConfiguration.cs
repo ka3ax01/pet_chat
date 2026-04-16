@@ -10,9 +10,10 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Title).HasMaxLength(255);
+        builder.Property(c => c.PhotoUrl).HasMaxLength(2048);
 
         builder
-            .HasMany(c => c.Members)
+            .HasMany(c => c.ChatMembers)
             .WithOne(cm => cm.Chat)
             .HasForeignKey(cm => cm.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
