@@ -25,6 +25,7 @@ public class AppDbContext(
     public DbSet<MessageRead> MessageReads => Set<MessageRead>();
     public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
     public DbSet<EntityAction> EntityActions => Set<EntityAction>();
+    public DbSet<BackendLog> BackendLogs => Set<BackendLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -100,7 +101,8 @@ public class AppDbContext(
     private static bool ShouldTrackEntry(EntityEntry entry)
     {
         return entry.State is EntityState.Added or EntityState.Modified or EntityState.Deleted
-            && entry.Entity is not EntityAction;
+            && entry.Entity is not EntityAction
+            && entry.Entity is not BackendLog;
     }
 
     private static EntityActionType? ResolveActionType(EntityState state)

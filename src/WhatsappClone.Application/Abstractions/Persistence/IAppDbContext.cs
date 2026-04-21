@@ -13,6 +13,7 @@ public interface IAppDbContext
     DbSet<MessageRead> MessageReads { get; }
     DbSet<RefreshSession> RefreshSessions { get; }
     DbSet<EntityAction> EntityActions { get; }
+    DbSet<BackendLog> BackendLogs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

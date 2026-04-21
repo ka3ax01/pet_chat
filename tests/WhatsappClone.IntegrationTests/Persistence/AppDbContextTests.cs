@@ -118,6 +118,27 @@ public class AppDbContextTests
         Assert.Equal(1, await context.EntityActions.CountAsync());
     }
 
+    [Fact]
+    public async Task SaveChangesAsync_WhenBackendLogIsAdded_DoesNotCreateEntityAction()
+    {
+        var now = new DateTimeOffset(2026, 4, 16, 10, 0, 0, TimeSpan.Zero);
+        await using var context = CreateContext(now, Guid.NewGuid());
+
+        context.BackendLogs.Add(
+            new BackendLog
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = now,
+                Level = "Error",
+                Message = "Test backend log"
+            });
+
+        await context.SaveChangesAsync();
+
+        Assert.Equal(1, await context.BackendLogs.CountAsync());
+        Assert.Empty(await context.EntityActions.ToListAsync());
+    }
+
     private static TestAppDbContext CreateContext(DateTimeOffset now, Guid currentUserId)
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()

@@ -1,3 +1,4 @@
+using WhatsappClone.Api.Middleware;
 using WhatsappClone.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
