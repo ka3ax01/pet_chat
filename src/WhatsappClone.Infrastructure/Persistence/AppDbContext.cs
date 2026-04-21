@@ -9,19 +9,13 @@ using WhatsappClone.Domain.Enums;
 
 namespace WhatsappClone.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext, IAppDbContext
+public class AppDbContext(
+    DbContextOptions<AppDbContext> options,
+    IDateTimeProvider dateTimeProvider,
+    ICurrentUserService currentUserService) : DbContext(options), IAppDbContext
 {
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly ICurrentUserService _currentUserService;
-
-    public AppDbContext(
-        DbContextOptions<AppDbContext> options,
-        IDateTimeProvider dateTimeProvider,
-        ICurrentUserService currentUserService) : base(options)
-    {
-        _dateTimeProvider = dateTimeProvider;
-        _currentUserService = currentUserService;
-    }
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Chat> Chats => Set<Chat>();
@@ -40,8 +34,7 @@ public class AppDbContext : DbContext, IAppDbContext
 
     public override int SaveChanges()
     {
-        ApplyAuditingAndActions();
-        return base.SaveChanges();
+        return SaveChanges(acceptAllChangesOnSuccess: true);
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -52,8 +45,7 @@ public class AppDbContext : DbContext, IAppDbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        ApplyAuditingAndActions();
-        return base.SaveChangesAsync(cancellationToken);
+        return SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken);
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
@@ -72,12 +64,14 @@ public class AppDbContext : DbContext, IAppDbContext
 
         foreach (var entry in ChangeTracker.Entries().Where(ShouldTrackEntry))
         {
+            var originalState = entry.State;
+
             if (entry.Entity is AuditableEntity<Guid> auditableEntity)
             {
                 ApplyAuditState(entry, auditableEntity, now, currentUserId);
             }
 
-            var actionType = ResolveActionType(entry.State);
+            var actionType = ResolveActionType(originalState);
 
             if (actionType is null)
             {
