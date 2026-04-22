@@ -50,6 +50,14 @@
       align-items: end;
     }
 
+    .auth {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: end;
+    }
+
     label {
       display: grid;
       gap: 5px;
@@ -163,6 +171,14 @@
   </header>
 
   <main>
+    <div class="auth">
+      <label>
+        Bearer token
+        <input id="token" type="password" placeholder="Paste an Admin JWT">
+      </label>
+      <button id="save-token" type="button">Use token</button>
+    </div>
+
     <form id="filters">
       <label>
         Level
@@ -226,6 +242,10 @@
     const pageLabel = document.getElementById('page');
     const prev = document.getElementById('prev');
     const next = document.getElementById('next');
+    const token = document.getElementById('token');
+    const saveToken = document.getElementById('save-token');
+
+    token.value = sessionStorage.getItem('adminLogsToken') ?? '';
 
     function html(value) {
       return String(value ?? '')
@@ -254,7 +274,12 @@
 
       rows.innerHTML = '<tr><td colspan="8" class="muted">Loading...</td></tr>';
 
-      const response = await fetch(`/api/admin/logs?${params.toString()}`);
+      const headers = {};
+      if (token.value) {
+        headers.Authorization = `Bearer ${token.value}`;
+      }
+
+      const response = await fetch(`/api/admin/logs?${params.toString()}`, { headers });
       if (!response.ok) {
         rows.innerHTML = `<tr><td colspan="8" class="muted">Failed to load logs: ${response.status}</td></tr>`;
         return;
@@ -299,6 +324,12 @@
 
     next.addEventListener('click', () => {
       state.page += 1;
+      loadLogs();
+    });
+
+    saveToken.addEventListener('click', () => {
+      sessionStorage.setItem('adminLogsToken', token.value);
+      state.page = 1;
       loadLogs();
     });
 

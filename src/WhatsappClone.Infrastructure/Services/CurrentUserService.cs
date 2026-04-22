@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using WhatsappClone.Application.Abstractions.Services;
 
 namespace WhatsappClone.Infrastructure.Services;
@@ -15,12 +16,12 @@ public class CurrentUserService : ICurrentUserService
 
         if (user is not null)
         {
-            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == "id");
-            var userNameClaim = user.Claims.FirstOrDefault(c => c.Type == "username");
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == "id" || c.Type == ClaimTypes.NameIdentifier);
+            var userNameClaim = user.Claims.FirstOrDefault(c => c.Type == "username" || c.Type == ClaimTypes.Name);
 
-            if (userIdClaim is not null)
+            if (userIdClaim is not null && Guid.TryParse(userIdClaim.Value, out var userId))
             {
-                UserId = Guid.Parse(userIdClaim.Value);
+                UserId = userId;
             }
 
             if (userNameClaim is not null)

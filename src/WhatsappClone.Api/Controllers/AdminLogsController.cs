@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatsappClone.Infrastructure.Persistence;
@@ -5,6 +6,7 @@ using WhatsappClone.Infrastructure.Persistence;
 namespace WhatsappClone.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = "AdminOnly")]
 [Route("api/admin/logs")]
 public class AdminLogsController(AppDbContext dbContext) : ControllerBase
 {
