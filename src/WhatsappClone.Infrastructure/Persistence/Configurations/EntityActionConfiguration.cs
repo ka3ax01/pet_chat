@@ -8,6 +8,7 @@ public class EntityActionConfiguration : IEntityTypeConfiguration<EntityAction>
 {
     public void Configure(EntityTypeBuilder<EntityAction> builder)
     {
+        builder.ToTable("EntityActions", DbSchemas.Audit);
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.EntityName).IsRequired().HasMaxLength(255);

@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using WhatsappClone.Api.Extensions;
 using WhatsappClone.Api.Middleware;
 using WhatsappClone.Application;
 using WhatsappClone.Infrastructure;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddApiSwagger();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -47,6 +49,8 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseApiSwagger();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

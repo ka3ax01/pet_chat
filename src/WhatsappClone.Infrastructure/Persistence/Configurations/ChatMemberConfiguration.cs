@@ -8,6 +8,7 @@ public class ChatMemberConfiguration : IEntityTypeConfiguration<ChatMember>
 {
     public void Configure(EntityTypeBuilder<ChatMember> builder)
     {
+        builder.ToTable("ChatMembers", DbSchemas.Messaging);
         builder.HasKey(cm => new { cm.ChatId, cm.UserId });
 
         builder.HasOne(cm => cm.User).WithMany(u => u.ChatMembers).HasForeignKey(cm => cm.UserId);

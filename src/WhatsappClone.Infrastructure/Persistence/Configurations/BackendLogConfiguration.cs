@@ -8,6 +8,7 @@ public class BackendLogConfiguration : IEntityTypeConfiguration<BackendLog>
 {
     public void Configure(EntityTypeBuilder<BackendLog> builder)
     {
+        builder.ToTable("BackendLogs", DbSchemas.Audit);
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Level).IsRequired().HasMaxLength(50);

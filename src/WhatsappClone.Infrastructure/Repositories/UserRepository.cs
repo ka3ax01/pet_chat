@@ -11,6 +11,8 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
     {
         return dbContext.Users
             .AsNoTracking()
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
             .FirstOrDefaultAsync(x => x.Id == userId && !x.IsDeleted, cancellationToken);
     }
 
@@ -19,6 +21,8 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
         var normalizedEmail = Normalize(email);
 
         return dbContext.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
             .FirstOrDefaultAsync(x => x.Email.ToLower() == normalizedEmail && !x.IsDeleted, cancellationToken);
     }
 

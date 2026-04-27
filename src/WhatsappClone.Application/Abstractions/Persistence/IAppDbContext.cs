@@ -6,6 +6,8 @@ namespace WhatsappClone.Application.Abstractions.Persistence;
 public interface IAppDbContext
 {
     DbSet<User> Users { get; }
+    DbSet<Role> Roles { get; }
+    DbSet<UserRole> UserRoles { get; }
     DbSet<Chat> Chats { get; }
     DbSet<ChatMember> ChatMembers { get; }
     DbSet<Message> Messages { get; }

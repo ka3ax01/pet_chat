@@ -17,7 +17,8 @@ public class LoginQueryHandler(
             throw new UnauthorizedAccessException("Invalid email or password.");
         }
 
-        var accessToken = jwtProvider.GenerateAccessToken(user.Id, user.UserName);
+        var roles = user.UserRoles.Select(x => x.Role.Name).ToArray();
+        var accessToken = jwtProvider.GenerateAccessToken(user.Id, user.UserName, roles);
 
         return new AuthResult(accessToken, user.Id, user.UserName, user.Email);
     }

@@ -8,6 +8,7 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {
+        builder.ToTable("Messages", DbSchemas.Messaging);
         builder.HasKey(m => m.Id);
         builder.Property(m => m.Text).HasMaxLength(1000);
 

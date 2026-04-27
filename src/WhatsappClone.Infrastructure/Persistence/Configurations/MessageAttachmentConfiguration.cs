@@ -8,6 +8,7 @@ public class MessageAttachmentConfiguration : IEntityTypeConfiguration<MessageAt
 {
     public void Configure(EntityTypeBuilder<MessageAttachment> builder)
     {
+        builder.ToTable("MessageAttachments", DbSchemas.Messaging);
         builder.HasKey(ma => ma.Id);
 
         builder.Property(ma => ma.FileName).IsRequired().HasMaxLength(255);
@@ -30,7 +31,7 @@ public class MessageAttachmentConfiguration : IEntityTypeConfiguration<MessageAt
         builder
             .HasOne(ma => ma.CreatedBy)
             .WithMany(cb => cb.CreatedMessageAttachments)
-            .HasForeignKey("CreatedById")
+            .HasForeignKey(ma => ma.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -10,6 +10,7 @@ public class User : AuditableEntity<Guid>
     public string? AvatarUrl { get; set; }
     public DateTimeOffset? LastSeenAt { get; set; }
 
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     public ICollection<ChatMember> ChatMembers { get; set; } = new List<ChatMember>();
 
     public ICollection<Chat> CreatedChats { get; set; } = new List<Chat>();

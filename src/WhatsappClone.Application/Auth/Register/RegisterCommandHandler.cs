@@ -1,5 +1,6 @@
 using WhatsappClone.Application.Abstractions.Auth;
 using WhatsappClone.Application.Abstractions.Persistence;
+using WhatsappClone.Domain.Constants;
 using WhatsappClone.Domain.Entities;
 
 namespace WhatsappClone.Application.Auth.Register;
@@ -45,13 +46,23 @@ public class RegisterCommandHandler(
             Id = Guid.NewGuid(),
             UserName = userName,
             Email = email,
-            PasswordHash = passwordHasher.Hash(command.Password)
+            PasswordHash = passwordHasher.Hash(command.Password),
+            UserRoles =
+            [
+                new UserRole
+                {
+                    UserId = Guid.NewGuid(),
+                    RoleId = SystemRoles.UserId
+                }
+            ]
         };
+
+        user.UserRoles.First().UserId = user.Id;
 
         userRepository.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var accessToken = jwtProvider.GenerateAccessToken(user.Id, user.UserName);
+        var accessToken = jwtProvider.GenerateAccessToken(user.Id, user.UserName, [SystemRoles.User]);
 
         return new AuthResult(accessToken, user.Id, user.UserName, user.Email);
     }

@@ -4,5 +4,5 @@ namespace WhatsappClone.Infrastructure.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTimeOffset Now => DateTimeOffset.Now.ToLocalTime();
+    public DateTimeOffset Now => DateTimeOffset.Now.ToUniversalTime();
 }

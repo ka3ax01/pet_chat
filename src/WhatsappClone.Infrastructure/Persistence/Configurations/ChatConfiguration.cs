@@ -8,6 +8,7 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
 {
     public void Configure(EntityTypeBuilder<Chat> builder)
     {
+        builder.ToTable("Chats", DbSchemas.Messaging);
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Title).HasMaxLength(255);
         builder.Property(c => c.PhotoUrl).HasMaxLength(2048);
